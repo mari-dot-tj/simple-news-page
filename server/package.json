@@ -7,11 +7,20 @@
     "test": "jest --forceExit"
   },
   "jest": {
-    "testRegex": "./tests/.+Test\\.js$",
-    "testURL": "http://localhost"
+    "verbose": true,
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "testURL": "http://localhost",
+    "testPathIgnorePatterns": [
+      "///node_modules/"
+    ]
   },
   "dependencies": {
     "express": "^4.16.4",
+    "mysql": "^2.16.0",
     "mysql2": "^1.6.1",
     "reload": "^2.3.1",
     "sequelize": "^4.41.0"

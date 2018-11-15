@@ -2,21 +2,206 @@
 
 import ReactDOM from 'react-dom';
 import * as React from 'react';
-import { Component } from 'react-simplified';
-import { HashRouter, Route, NavLink } from 'react-router-dom';
-import { Alert } from './widgets';
-import { studentService } from './services';
+import {Component} from 'react-simplified';
+import {HashRouter, Route, NavLink} from 'react-router-dom';
+import {Alert, NavBar} from './widgets';
+import {articleService} from './services';
+import {categoryService} from './services';
 
 // Reload application when not in production environment
 if (process.env.NODE_ENV !== 'production') {
-  let script = document.createElement('script');
-  script.src = '/reload/reload.js';
-  if (document.body) document.body.appendChild(script);
+	let script = document.createElement('script');
+	script.src = '/reload/reload.js';
+	if (document.body) document.body.appendChild(script);
 }
 
 import createHashHistory from 'history/createHashHistory';
+
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
+class Menu extends Component {
+	
+	render () {
+		return (
+			
+			<NavBar>
+				
+				<NavBar.Brand>Home</NavBar.Brand>
+				<NavBar.Link to = "/home/nyheter">Nyheter</NavBar.Link>
+				<NavBar.Link to = "/home/tek">Tek</NavBar.Link>
+				<NavBar.Link to = "/home/sport">Sport</NavBar.Link>
+				<NavBar.Link to = "/home/kultur">Kultur</NavBar.Link>
+				<NavBar.Link to = "/registerArticle" exact = {true}>Registrer artikkel</NavBar.Link>
+			
+			</NavBar>
+			
+			
+			/*<nav id = "meny" className = "navbar navbar-inverse">
+				<div className = "container-fluid">
+					<div className = "navbar-header">
+						<NavLink className = "navbar-brand" to = "/" replace>COMMUNITY NETTAVIS</NavLink>
+					</div>
+					
+					<div>
+						<ul className = "nav navbar-nav">
+							{this.categories.map((category, i) => (
+								<li key = {i}>
+									<NavLink exact to = {'/category/' + category.category}>{category.category}</NavLink>
+								</li>
+							))}
+						</ul>
+					
+					
+					</div>
+					
+					<ul className = "nav navbar-nav navbar-right">
+						<li>
+							<NavLink exact to = "/registerArticle">Registreringsside</NavLink>
+						</li>
+					</ul>
+				</div>
+			</nav>*/
+		)
+	}
+	
+	/*	mounted () {
+			categoryService.getAllCategories()
+				.then(categories => (this.categories = categories))
+				.catch((error: Error) => Alert.danger(error.message));
+		}*/
+	
+	
+}
+
+class Home extends Component {
+
+
+}
+
+class Article extends Component {
+
+
+}
+
+class Category extends Component {
+
+}
+
+class RegisterArticle extends Component {
+	
+	categories = [];
+	
+	article = {
+		headline: '',
+		category: '',
+		contents: '',
+		picture: '',
+		importance: ''
+	};
+	
+	style = {
+		marginTop: '80px'
+	};
+	
+	render () {
+		return (
+			<div className = "row" style = {this.style}>
+				<div className="col-md-1"/>
+				<div className = "col-md-4">
+					<form>
+						<div className = "form-group">
+							<label htmlFor = "inOverskrift">Temp Headline</label>
+							<input
+								type = "text"
+								className = "form-control"
+								id = "inOverskrift"
+								onChange = {(event: SyntheticInputEvent<HTMLInputElement>) => (this.article.headline = event.target.value)}
+							/>
+							<br />
+							<label htmlFor = "inBildelink">Link til bilde</label>
+							<input
+								type = "text"
+								className = "form-control"
+								id = "inBildelink"
+								onChange = {(event: SyntheticInputEvent<HTMLInputElement>) => (this.article.picture = event.target.value)}
+							/>
+						</div>
+						<div className = "form-group">
+							<label htmlFor = "optKategori">Kategori</label>
+							<select
+								className = "form-control"
+								id = "optKategori"
+								onChange = {(event: SyntheticInputEvent<HTMLInputElement>) => (this.article.category = event.target.value)}
+							>
+								{this.categories.map((category, i) => (
+									<option key = {i} value = {category.category}>
+										{category.category}
+									</option>
+								))}
+							</select>
+						</div>
+						<div className = "form-group">
+							<label htmlFor = "chViktighet">Viktighet</label>
+							<br />
+							<input name = "viktighet"
+										 className = "form-check-input"
+										 type = "radio"
+										 value = "1"
+										 id = "chViktighet1"
+										 onChange = {(event: SyntheticInputEvent<HTMLInputElement>) => (this.article.importance = event.target.value)}
+							/>
+							<label className = "form-check-label" htmlFor = "defaultCheck1">
+								Svært viktig
+							</label>
+							<br />
+							<input name = "viktighet"
+										 className = "form-check-input"
+										 type = "radio"
+										 value = "2"
+										 id = "chViktighet2"
+										 onChange = {(event: SyntheticInputEvent<HTMLInputElement>) => (this.article.importance = event.target.value)}
+							/>
+							<label className = "form-check-label" htmlFor = "chViktighet2">
+								Mindre viktig
+							</label>
+						</div>
+						<button type = "submit" className = "btn btn-primary" onClick = {this.publish}>Publiser</button>
+					</form>
+				</div>
+				
+				<div className = "col-md-6">
+					<div className = "form-group">
+						<label htmlFor = "inTekst">Tekst</label>
+						<textarea id = "inTekst"
+							//defaultValue = {loremipsum}
+											className = "form-control"
+											rows = "13"
+											onChange = {(event: SyntheticInputEvent<HTMLInputElement>) => (this.article.contents = event.target.value)}>
+						</textarea>
+					</div>
+				</div>
+				<div className="col-md-1"/>
+			
+			</div>
+		)
+	}
+	
+	
+	publish () {
+		//$FlowFixMe
+		articleService.createOne(this.article)
+			.catch((error: Error) => Alert.danger(error.message));
+	}
+	
+	mounted () {
+		categoryService.getAllCategories()
+			.then(categories => (this.categories = categories))
+			.catch((error: Error) => Alert.danger(error.message));
+	}
+	
+}
+
+/*
 class Menu extends Component {
   render() {
     return (
@@ -165,20 +350,33 @@ class StudentEdit extends Component<{ match: { params: { id: number } } }> {
       })
       .catch((error: Error) => Alert.danger(error.message));
   }
+}*/
+
+class Redirection extends Component {
+	render () {
+		return (
+			<Redirection to = {"/home"} />
+		)
+	}
 }
 
 const root = document.getElementById('root');
 if (root)
-  ReactDOM.render(
-    <HashRouter>
-      <div>
-        <Alert />
-        <Menu />
-        <Route exact path="/" component={Home} />
-        <Route path="/students" component={StudentList} />
-        <Route exact path="/students/:id" component={StudentDetails} />
-        <Route exact path="/students/:id/edit" component={StudentEdit} />
-      </div>
-    </HashRouter>,
-    root
-  );
+	ReactDOM.render(
+		<HashRouter>
+			<div>
+				<Menu />
+				<Alert />
+				{/*<Route exact path = "/" component = {Redirection} />
+				<Route exact path = "/#/" component = {Redirection} />*/}
+				<Route exact path = "/registerArticle" component = {RegisterArticle} />
+				<Route exact path = "/home/:category" component = {Category} />
+				<Route exact path = "/home" component = {Home} />
+				{/*<Route exact path = "/" component = {Home} />
+				<Route path = "/students" component = {StudentList} />
+				<Route exact path = "/students/:id" component = {StudentDetails} />
+				<Route exact path = "/students/:id/edit" component = {StudentEdit} />*/}
+			</div>
+		</HashRouter>,
+		root
+	);
