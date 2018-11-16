@@ -5,6 +5,7 @@ axios.interceptors.response.use(response => response.data);
 
 
 class Article {
+	articleID: number;
 	headline: string;
 	category: string;
 	contents: string;
@@ -18,53 +19,55 @@ class Category{
 	category: string;
 }
 
+
+
 class ArticleService {
 	getAll (): Promise<Article[]> {
 		return axios.get('/article');
 	}
 	
-	createOne (article: Article): Promise<Article> {
+	getAllImportance(): Promise<Article[]>{
+		return axios.get('/articlesImportance')
+	}
+	
+	createOne (article: Article): Promise<void> {
 		return axios.post('/article', article);
 	}
 	
-	getOne (id: number, category: string) : Promise<Article>{
-		return axios.get('article/:' + category + '/:' + id);
+	getOne (id: number, category: string) : Promise<Article[]>{
+		return axios.get('/article/' + category + '/' + id);
 	}
+	
+	getArticlesCategory(category: string): Promise<Article[]>{
+		return axios.get('/article/' + category)
+	}
+	
+	deleteOneByID(id: number): Promise<void>{
+		return axios.delete('/deleteArticle/' + id)
+	}
+	
+	updateOne(article: Article): Promise<void>{
+		return axios.put('/updateArticle/' + article.articleID, article)
+	}
+	
+	getOneByID(id: number): Promise<Article[]>{
+		return axios.get('/articleGetOne/' + id, id)
+	}
+	
+	getAllLiveFeed(): Promise<Article[]>{
+		return axios.get('/liveFeed');
+	}
+	
 }
 
 class CategoryService{
 	getAllCategories (): Promise<Category[]>{
 		return axios.get('/categories');
 	}
-
-
+	
 }
 
 
 export let articleService = new ArticleService();
 export let categoryService = new CategoryService();
-/*
 
-class Student {
-	id: number;
-	firstName: string;
-	lastName: string;
-	email: string;
-}
-
-class StudentService {
-	getStudents (): Promise<Student[]> {
-		return axios.get('/students');
-	}
-	
-	getStudent (id: number): Promise<Student> {
-		return axios.get('/students/' + id);
-	}
-	
-	updateStudent (student: Student): Promise<void> {
-		return axios.put('/students', student);
-	}
-}
-
-export let studentService = new StudentService();
-*/

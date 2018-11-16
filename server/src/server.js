@@ -48,52 +48,62 @@ app.post('/article', (req: Request, res: Response) => {
 	})
 });
 
-
-app.get('/article/:category/:id', (req: Request, res: Response) => {
-	articleDao.getOne(req.params.articleID, (status, data)=>{
-		res.status(status);
-		res.json(data);
-	})
-});
-
-app.get('/categories', (req: Request, res: Response)=>{
-	articleDao.getAllCategories((status, data)=>{
+app.get('/articlesImportance', (req: Request, res: Response) => {
+	articleDao.getAllImportance((status, data) => {
 		res.status(status);
 		res.json(data);
 	})
 });
 
 
-//TODO: put updateOne
-//TODO: put deleteOneByID
-
-/*
-app.get('/students', (req: Request, res: Response) => {
-	return Students.findAll().then(students => res.send(students));
+app.get('/article/:category/:articleID', (req: Request, res: Response) => {
+	articleDao.getOne(req.params.articleID, (status, data) => {
+		res.status(status);
+		res.json(data);
+	})
 });
 
-app.get('/students/:id', (req: Request, res: Response) => {
-	return Students.findOne({where: {id: Number(req.params.id)}}).then(
-		student => (student ? res.send(student) : res.sendStatus(404))
-	);
+app.get('/articleGetOne/:articleID', (req: Request, res: Response) => {
+	articleDao.getOneByID(req.params.articleID, (status, data) => {
+		res.status(status);
+		res.json(data);
+	})
 });
 
-app.put('/students', (req: Request, res: Response) => {
-	if (
-		!req.body ||
-		typeof req.body.id !== 'number' ||
-		typeof req.body.firstName !== 'string' ||
-		typeof req.body.lastName !== 'string' ||
-		typeof req.body.email !== 'string'
-	)
-		return res.sendStatus(400);
-	
-	return Students.update(
-		{firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email},
-		{where: {id: req.body.id}}
-	).then(count => (count ? res.sendStatus(200) : res.sendStatus(404)));
+app.get('/categories', (req: Request, res: Response) => {
+	articleDao.getAllCategories((status, data) => {
+		res.status(status);
+		res.json(data);
+	})
 });
-*/
+
+app.get('/article/:category', (req: Request, res: Response) => {
+	articleDao.getArticlesCategory(req.params.category, (status, data) => {
+		res.status(status);
+		res.json(data);
+	})
+});
+
+app.delete('/deleteArticle/:articleID', (req: Request, res: Response) => {
+	articleDao.deleteOneByID(req.params.articleID, (status, data) => {
+		res.status(status);
+		res.json(data);
+	})
+});
+
+app.put('/updateArticle/:articleID', (req: Request, res: Response) => {
+	articleDao.updateOne(req.body, (status, data) => {
+		res.status(status);
+		res.json(data);
+	})
+});
+
+app.get('/liveFeed', (req: Request, res: Response)=>{
+	articleDao.getAllLiveFeed((status, data) => {
+		res.status(status);
+		res.json(data);
+	})
+});
 
 
 // Hot reload application when not in production environment
