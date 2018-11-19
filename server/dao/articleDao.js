@@ -23,6 +23,11 @@ type jsonUpdateA = {
 }
 
 module.exports = class ArticleDao extends Dao {
+	
+	/**
+	 * Gets all articles with importance = 1
+	 * @param callback
+	 */
 	getAll (callback: myCallBack) {
 		super.query(
 			"select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") AS timeStampMade FROM NewsArticle where importance = 1 ORDER BY articleID DESC ",
@@ -30,6 +35,10 @@ module.exports = class ArticleDao extends Dao {
 			callback);
 	}
 	
+	/**
+	 * Gets all articles no matter importance
+	 * @param callback
+	 */
 	getAllImportance (callback: mixed) {
 		super.query(
 			"select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") as timeStampMade FROM NewsArticle ORDER BY articleID DESC",
@@ -64,8 +73,6 @@ module.exports = class ArticleDao extends Dao {
 	
 	updateOne (json: jsonUpdateA, callback: mixed) {
 		let val = [json.headline, json.category, json.contents, json.picture, json.importance, json.articleID];
-		console.log(json.headline + 'HER ER JEG');
-		console.log(json.headline + 'HER ER JEG');
 		super.query(
 			"Update NewsArticle set headline = ?, category = ?, contents = ?, picture = ?, importance = ? where articleID = ?",
 			val,

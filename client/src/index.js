@@ -141,14 +141,11 @@ class ArticleOverview extends Component {
 	
 	render () {
 		return (
-			<BasicCard title = "Artikler">
+			<BasicCard title = "Artikler på nettsiden">
 				<ListGroup>
 					{this.articles.map((article, i) => (
 						<ListGroup.Item key = {i}>
 							{article.headline} ----- {article.timeStampMade}
-							{/*<button type = "button" onClick = {() => history.push('/editArticles/edit/' + article.articleID)}
-											className = "float-right btn btn-primary">Rediger
-							</button>*/}
 							<Button.Danger onClick = {() => this.delete(article.articleID, article.headline)}>
 								Slett
 							</Button.Danger>
@@ -361,6 +358,7 @@ class EditArticles extends Component {
 	render () {
 		return (
 			<div className = "container-fluid">
+				<h5 className = "headlines">Legg til artikkel</h5>
 				<div className = "row" style = {this.style}>
 					<div className = "col-md-1" />
 					<div className = "col-md-4">
@@ -422,7 +420,10 @@ class EditArticles extends Component {
 									Mindre viktig
 								</label>
 							</div>
-							<button type = "submit" className = "btn btn-primary" onClick = {this.publish}>Publiser</button>
+							<Button.Success onClick = {() => this.publish()}>
+								Publiser
+							</Button.Success>
+							{/*<button type = "submit" className = "btn btn-primary" onClick = {this.publish}>Publiser</button>*/}
 						</form>
 					</div>
 					
