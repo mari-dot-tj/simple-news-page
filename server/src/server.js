@@ -34,6 +34,8 @@ if (pool) {
 	articleDao = new ArticleDao(pool);
 }
 
+const ARTICLE_LIMIT = 6;
+
 app.get('/article', (req: Request, res: Response) => {
 	articleDao.getAll((status, data) => {
 		res.status(status);
@@ -100,6 +102,14 @@ app.put('/updateArticle/:articleID', (req: Request, res: Response) => {
 
 app.get('/liveFeed', (req: Request, res: Response)=>{
 	articleDao.getAllLiveFeed((status, data) => {
+		res.status(status);
+		res.json(data);
+	})
+});
+
+app.get('/mainpage', (req: Request, res: Response)=>{
+	const page: number = Number(req.query.page) || 0;
+	articleDao.getAllPriority(page*ARTICLE_LIMIT, ARTICLE_LIMIT, (status, data) => {
 		res.status(status);
 		res.json(data);
 	})

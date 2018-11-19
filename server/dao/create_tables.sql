@@ -8,10 +8,10 @@ create table Category(
 
 create table NewsArticle(
   articleID integer not null auto_increment,
-  headline varchar(30),
-  category varchar(30),
+  headline varchar(30) not null,
+  category varchar(30) not null,
   contents text,
-  picture text,
+  picture text not null,
   importance tinyint not null,
   timeStampMade TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   primary key (articleID)

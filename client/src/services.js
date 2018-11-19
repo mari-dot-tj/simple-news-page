@@ -58,6 +58,10 @@ class ArticleService {
 		return axios.get('/liveFeed');
 	}
 	
+	getAllPriority(page: number = 0): Promise<Article[]>{
+		return axios.get('/mainpage?page=' + page);
+	}
+	
 }
 
 class CategoryService{

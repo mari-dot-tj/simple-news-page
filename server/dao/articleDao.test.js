@@ -150,6 +150,32 @@ test("get all articles by importance = 2 for livefeed", done => {
 	
 });
 
+test("get all by importance=1 and max x decided by articles you want per page", done =>{
+	function callback(status, data){
+		console.log(
+			"Test callback: status=" + status + ", data.length=" + data.length
+		);
+		expect(data.length).toBe(6);
+		done();
+	}
+	
+	articleDao.getAllPriority(0, 6, callback);
+	
+});
+
+test("get all categories from Category table", done => {
+	function callback (status, data) {
+		console.log(
+			"Test callback: status=" + status + ", data.length=" + data.length
+		);
+		expect(data.length).toBe(3);
+		done();
+	}
+	
+	articleDao.getAllCategories(callback);
+	
+});
+
 
 test("delete person by id in db", done => {
 	function callback (status, data) {

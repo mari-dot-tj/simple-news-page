@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import * as React from 'react';
 import {Component} from 'react-simplified';
 import {HashRouter, Route, NavLink, Redirect} from 'react-router-dom';
-import {Alert, Card, NavBar, NewsCard, ListGroup, BasicCard, Button, NewsFeedProp} from './widgets';
+import {Alert, Card, NavBar, NewsCard, ListGroup, BasicCard, Button, NewsFeedProp, Navigation} from './widgets';
 import {articleService} from './services';
 import {categoryService} from './services';
 
@@ -42,6 +42,7 @@ class Menu extends Component {
 class Home extends Component {
 	
 	articles = [];
+	page: number = 0;
 	
 	render () {
 		
@@ -58,16 +59,60 @@ class Home extends Component {
 						))
 					}
 				</div>
+				<Navigation next = {this.nextPage} prev = {this.prevPage}>
+					{this.page + 1}
+				</Navigation>
 			</div>
 		
 		)
 	}
 	
-	mounted () {
-		articleService
-			.getAll()
+/*	getPage = () => {
+		articleService.getAllPriority(this.page)
 			.then(articles => (this.articles = articles))
 			.catch((error: Error) => Alert.danger(error.message));
+		window.scrollTo(0, 0);
+	};*/
+	
+	getPage = async () => {
+		try{
+			await articleService.getAllPriority(this.page)
+				.then(articles => (this.articles = articles))
+				.catch((error: Error) => Alert.danger(error.message));
+		}catch (e) {
+			Alert.danger(e);
+		}
+		window.scrollTo(0, 0);
+		
+	};
+	
+	nextPage = () => {
+		if (this.page < 0) {
+			this.page = 0;
+		} else {
+			this.page++;
+		}
+		this.getPage();
+	};
+	
+	prevPage = () => {
+		if (this.page < 0) {
+			this.page = 0;
+		} else {
+			this.page--;
+		}
+		this.getPage();
+	};
+	
+	
+	mounted () {
+		
+		this.getPage();
+		
+		/*articleService
+			.getAll()
+			.then(articles => (this.articles = articles))
+			.catch((error: Error) => Alert.danger(error.message));*/
 	}
 	
 	
@@ -240,13 +285,8 @@ class EditArticle extends Component<{ match: { params: { articleID: number } } }
 									value = {this.article.category}
 									onChange = {(event: SyntheticInputEvent<HTMLInputElement>) => {
 										if (this.article) (this.article.category = event.target.value)
-									}}
-								>
-									{/*<option value="" hidden></option>
-										{this.categories.map(cat=>{
-											<option value={cat.category}>{cat.category}</option>
-										})}
-									*/}
+									}}>
+									
 									{this.categories.map((category, i) => (
 										<option key = {i} value = {category.category}>
 											{category.category}
@@ -311,17 +351,9 @@ class EditArticle extends Component<{ match: { params: { articleID: number } } }
 	update () {
 		// $FlowFixMe
 		articleService.updateOne(this.article)
-		/*
-					.then(history.push('/home/' + this.article.category + '/' + this.article.articleID))
-		*/
 			.then(Alert.success('You successfully updated ' + this.article.headline))
 			.catch((error: Error) => Alert.danger(error.message));
-		// $FlowFixMe
-		/*		articleService.updateOne(article.articleID, article)
-					.then(Alert.success('You successfully updated' + this.article.headline))
-					.catch((error: Error) => Alert.danger(error.message));
-				
-				history.push('/home/' + article.category + '/' + article.articleID);*/
+		
 		history.push('/home/' + this.article.category + '/' + this.article.articleID);
 	}
 	
@@ -388,10 +420,10 @@ class EditArticles extends Component {
 									onChange = {(event: SyntheticInputEvent<HTMLInputElement>) => (this.article.category = event.target.value)}>
 									{
 										this.categories.map((category, i) => (
-										<option key = {i} value = {category.category}>
-											{category.category}
-										</option>
-									))
+											<option key = {i} value = {category.category}>
+												{category.category}
+											</option>
+										))
 									}
 								</select>
 							</div>
@@ -475,24 +507,24 @@ class LiveFeed extends Component {
 							
 							<div className = "items newsfeed_title ">
 								<h4>NEWSFEED</h4>
-								<div className = "line_arrow right"/>
+								<div className = "line_arrow right" />
 							</div>
 							
 							{
-								this.articles.map((article, i)=>(
-									<NewsFeedProp key={i} time={article.timeStampMade}
-																headline={article.headline}
-																onClick={() => history.push('/home/' + article.category + '/' + article.articleID)}>
+								this.articles.map((article, i) => (
+									<NewsFeedProp key = {i} time = {article.timeStampMade}
+																headline = {article.headline}
+																onClick = {() => history.push('/home/' + article.category + '/' + article.articleID)}>
 										{article.headline}
 									</NewsFeedProp>
 								))
 							}
-							
+						
 						</div>
 					</div>
 				</div>
 			</div>
-			
+		
 		)
 	}
 	

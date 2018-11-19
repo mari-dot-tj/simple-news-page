@@ -30,7 +30,7 @@ module.exports = class ArticleDao extends Dao {
 	 */
 	getAll (callback: myCallBack) {
 		super.query(
-			"select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") AS timeStampMade FROM NewsArticle where importance = 1 ORDER BY articleID DESC ",
+			"select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") AS timeStampMade FROM NewsArticle where importance = 1 ORDER BY timestampMade DESC ",
 			[],
 			callback);
 	}
@@ -41,7 +41,7 @@ module.exports = class ArticleDao extends Dao {
 	 */
 	getAllImportance (callback: mixed) {
 		super.query(
-			"select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") as timeStampMade FROM NewsArticle ORDER BY articleID DESC",
+			"select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") as timeStampMade FROM NewsArticle ORDER BY timestampMade DESC",
 			[],
 			callback);
 	}
@@ -103,8 +103,14 @@ module.exports = class ArticleDao extends Dao {
 	}
 	
 	getAllLiveFeed (callback: mixed) {
-		super.query("select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") as timeStampMade from NewsArticle where importance = 2",
+		super.query("select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") as timeStampMade from NewsArticle where importance = 2 ORDER BY timestampMade DESC",
 			[],
+			callback);
+	}
+	
+	getAllPriority(start: number, end: number, callback: mixed){
+		super.query("select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") AS timeStampMade FROM NewsArticle where importance = 1 ORDER BY timestampMade DESC LIMIT ?,?",
+			[start, end],
 			callback);
 	}
 	
