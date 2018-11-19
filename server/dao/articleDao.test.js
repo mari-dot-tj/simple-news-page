@@ -163,6 +163,19 @@ test("get all by importance=1 and max x decided by articles you want per page", 
 	
 });
 
+test("get all by category=? and max x decided by articles you want per page", done =>{
+	function callback(status, data){
+		console.log(
+			"Test callback: status=" + status + ", data.length=" + data.length
+		);
+		expect(data.length).toBe(6);
+		done();
+	}
+	
+	articleDao.getArticlesCategoryPage('kultur' ,0, 6, callback);
+	
+});
+
 test("get all categories from Category table", done => {
 	function callback (status, data) {
 		console.log(

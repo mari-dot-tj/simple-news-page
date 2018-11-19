@@ -67,19 +67,19 @@ class Home extends Component {
 		)
 	}
 	
-/*	getPage = () => {
-		articleService.getAllPriority(this.page)
-			.then(articles => (this.articles = articles))
-			.catch((error: Error) => Alert.danger(error.message));
-		window.scrollTo(0, 0);
-	};*/
+	/*	getPage = () => {
+			articleService.getAllPriority(this.page)
+				.then(articles => (this.articles = articles))
+				.catch((error: Error) => Alert.danger(error.message));
+			window.scrollTo(0, 0);
+		};*/
 	
 	getPage = async () => {
-		try{
+		try {
 			await articleService.getAllPriority(this.page)
 				.then(articles => (this.articles = articles))
 				.catch((error: Error) => Alert.danger(error.message));
-		}catch (e) {
+		} catch (e) {
 			Alert.danger(e);
 		}
 		window.scrollTo(0, 0);
@@ -157,27 +157,67 @@ class Article extends Component<{ match: { params: { articleID: number, category
 class Category extends Component<{ match: { params: { category: string } } }> {
 	
 	articles = [];
+	page: number = 0;
+	
 	
 	render () {
 		return (
-			<div className = "container-fluid wrapper">
-				{
-					this.articles.map((article, i) => (
-						<Card key = {i}
-									imgLink = {article.picture}
-									title = {article.headline}
-									to = {"/home/" + article.category + "/" + article.articleID} />
-					))}
-			
+			<div>
+				<div className = "container-fluid wrapper">
+					{
+						this.articles.map((article, i) => (
+							<Card key = {i}
+										imgLink = {article.picture}
+										title = {article.headline}
+										to = {"/home/" + article.category + "/" + article.articleID} />
+						))}
+				</div>
+				
+				<Navigation next = {this.nextPage} prev = {this.prevPage}>
+					{this.page + 1}
+				</Navigation>
+				
 			</div>
 		)
 	}
 	
+	getPage = async () => {
+		//TODO: 
+		try {
+			await articleService.getArticlesCategoryPage(this.page, this.props.match.params.category)
+				.then(articles => (this.articles = articles))
+				.catch((error: Error) => Alert.danger(error.message));
+		} catch (e) {
+			Alert.danger(e);
+		}
+		window.scrollTo(0, 0);
+		
+	};
+	
+	nextPage = () => {
+		if (this.page < 0) {
+			this.page = 0;
+		} else {
+			this.page++;
+		}
+		this.getPage();
+	};
+	
+	prevPage = () => {
+		if (this.page < 0) {
+			this.page = 0;
+		} else {
+			this.page--;
+		}
+		this.getPage();
+	};
+	
+	
 	mounted () {
-		articleService.getArticlesCategory(this.props.match.params.category)
-			.then(articles => (this.articles = articles))
-			.catch((error: Error) => Alert.danger(error.message));
+		this.page = 0;
+		this.getPage();
 	}
+	
 }
 
 class ArticleOverview extends Component {
@@ -506,7 +546,7 @@ class LiveFeed extends Component {
 						<div className = "list_horizontal">
 							
 							<div className = "items newsfeed_title ">
-								<h4>NEWSFEED</h4>
+								<h4>SISTE</h4>
 								<div className = "line_arrow right" />
 							</div>
 							

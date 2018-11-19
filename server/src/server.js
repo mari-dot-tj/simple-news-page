@@ -115,6 +115,16 @@ app.get('/mainpage', (req: Request, res: Response)=>{
 	})
 });
 
+//SOMETHING WRONG
+app.get('/mainpage/categoryPage/:category', (req: Request, res: Response)=>{
+	const page: number = Number(req.query.page) || 0;
+	console.log('Page number: ' + page + ' category: ' + req.params.category);
+	articleDao.getArticlesCategoryPage(req.params.category, page*ARTICLE_LIMIT, ARTICLE_LIMIT, (status, data) => {
+		res.status(status);
+		res.json(data);
+	})
+});
+
 
 // Hot reload application when not in production environment
 if (process.env.NODE_ENV !== 'production') {

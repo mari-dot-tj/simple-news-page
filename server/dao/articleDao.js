@@ -114,4 +114,10 @@ module.exports = class ArticleDao extends Dao {
 			callback);
 	}
 	
+	getArticlesCategoryPage(category: string, start: number, end: number, callback: mixed){
+		super.query("select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") AS timeStampMade FROM NewsArticle where category = ? ORDER BY timeStampMade DESC LIMIT ?,?",
+			[category, start, end],
+			callback);
+	}
+	
 };

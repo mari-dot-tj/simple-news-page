@@ -62,6 +62,11 @@ class ArticleService {
 		return axios.get('/mainpage?page=' + page);
 	}
 	
+	getArticlesCategoryPage(page: number = 0 ,category: string): Promise<Article[]>{
+		console.log('Page number: ' + page + ' category: ' + category + ' SERVICES');
+		return axios.get('/mainpage/categoryPage/' + category + '?page=' + page);
+	}
+	
 }
 
 class CategoryService{
