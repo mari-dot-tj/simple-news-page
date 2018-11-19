@@ -133,7 +133,7 @@ test("get all articles by category", done => {
 		done();
 	}
 	
-	articleDao.getArticlesCategory("Kultur", callback);
+	articleDao.getArticlesCategory("Sport", callback);
 	
 });
 
