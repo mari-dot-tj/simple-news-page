@@ -83,11 +83,6 @@ test("add article to db", done => {
 			"Test callback: status=" + status + ", data=" + JSON.stringify(data)
 		);
 		expect(data.affectedRows).toBeGreaterThanOrEqual(1);
-		expect(data[0].headline).toBe("Test-Headline3");
-		expect(data[0].category).toBe("Teknologi");
-		expect(data[0].contents).toBe("Test-bdoy");
-		expect(data[0].picture).toBe("link");
-		expect(data[0].importance).toBe(2);
 		done();
 	}
 	
