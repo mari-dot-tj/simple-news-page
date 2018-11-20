@@ -49,7 +49,7 @@ describe('NavBarBrand tests', () => {
 		</NavBar.Brand>
 	);
 	
-	it('Sjekker at Brand har de rette klassene', () => {
+	it('Checking that Brand has the right classes', () => {
 		expect(wrapper.find('NavLink').hasClass('navbar-brand')).toEqual(true)
 	});
 });
@@ -61,11 +61,11 @@ describe('Card tests', () => {
 		</Card>
 	);
 	
-	it('Sjekker at img har de rette klassene', () => {
+	it('Checking that img has the right classes', () => {
 		expect(wrapper.find('img').hasClass('card-img-top card-img-top')).toEqual(true)
 	});
 	
-	it('Sjekker at Card har de rette klassene', () => {
+	it('Checking that Card has the right classes', () => {
 		expect(wrapper.find('img').parent().hasClass('card')).toEqual(true)
 	});
 
@@ -78,14 +78,14 @@ describe('NewsFeedProp tests', () => {
 		</NewsFeedProp>
 	);
 	
-	it('Sjekker at button har de rette klassene', () => {
+	it('Checking that button has the right classes', () => {
 		expect(wrapper.find('button').hasClass('btn-heading')).toEqual(true)
 	});
 	
-	it('Sjekker at time har forelder med rett klasse', () => {
+	it('Checking if time has parent with right classes', () => {
 		expect(wrapper.find('time').parent().hasClass('entry_metadata')).toEqual(true)
 	});
-	it('Sjekker at h4 har forelder med rett klasse', () => {
+	it('Checking if h4 has the right classes', () => {
 		expect(wrapper.find('h4').parent().hasClass('title')).toEqual(true)
 	});
 
@@ -98,7 +98,7 @@ describe('ButtonSuccess tests', () => {
 		</Button.Success>
 	);
 	
-	it('Sjekker at ButtonSuccess har de rette klassene', () => {
+	it('Checking that ButtonSuccess has the right classes', () => {
 		expect(wrapper.find('button').hasClass('btn btn-success ml-3')).toEqual(true)
 	});
 	
@@ -115,15 +115,15 @@ describe('NewsCard tests', () => {
 		</NewsCard>
 	);
 	
-	it('Sjekker at img har de rette klassene', () => {
+	it('Checking that img has the right classes', () => {
 		expect(wrapper.find('img').hasClass('card-img-top card-img-top')).toEqual(true)
 	});
 	
-	it('Sjekker at h4 har de rette klassene', () => {
+	it('Checking that h4 has the right classes', () => {
 		expect(wrapper.find('h4').hasClass('card-title headerSpecs')).toEqual(true)
 	});
 	
-	it('Sjekker at h4 har rett parent med riktige klasser', () => {
+	it('Checking if h4 has parent with right classes', () => {
 		expect(wrapper.find('h4').parent().hasClass('card-body')).toEqual(true)
 	});
 });

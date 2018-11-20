@@ -3,7 +3,7 @@
 import ReactDOM from 'react-dom';
 import * as React from 'react';
 import {Component} from 'react-simplified';
-import {HashRouter, Route, NavLink, Redirect} from 'react-router-dom';
+import {HashRouter, Route, Redirect} from 'react-router-dom';
 import {Alert, Card, NavBar, NewsCard, ListGroup, BasicCard, Button, NewsFeedProp, Navigation} from './widgets';
 import {articleService} from './services';
 import {categoryService} from './services';
@@ -17,8 +17,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 import createHashHistory from 'history/createHashHistory';
 
-const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+const history = createHashHistory();
 
+/**
+ * Sticky menu on top of page
+ */
 class Menu extends Component {
 	
 	render () {
@@ -39,6 +42,9 @@ class Menu extends Component {
 	
 }
 
+/**
+ * Home page with articles with importance = 1
+ */
 class Home extends Component {
 	
 	articles = [];
@@ -70,15 +76,6 @@ class Home extends Component {
 		
 		)
 	}
-	//TODO: fix logic's: antall artikler/6 (antall pr side) = maxpage. vet hvor mange sider jeg skal. hvis currpage og maxpage er samme = false ellers true. en for kategori siden og en for home (articledao)
-	
-	/*	getPage = () => {
-			articleService.getAllPriority(this.page)
-				.then(articles => (this.articles = articles))
-				.catch((error: Error) => Alert.danger(error.message));
-			window.scrollTo(0, 0);
-		};*/
-	
 	
 	checkDisplayButtons = () =>{
 		this.showPrev = this.page !== 0;
@@ -132,14 +129,13 @@ class Home extends Component {
 				this.getPage();
 			});
 		
-		/*articleService
-			.getAll()
-			.then(articles => (this.articles = articles))
-			.catch((error: Error) => Alert.danger(error.message));*/
 	}
 	
-	
 }
+
+/**
+ * Singe article page
+ */
 
 class Article extends Component<{ match: { params: { articleID: number, category: string } } }> {
 	
@@ -176,6 +172,10 @@ class Article extends Component<{ match: { params: { articleID: number, category
 	}
 	
 }
+
+/**
+ * Articles according to category
+ */
 
 class Category extends Component<{ match: { params: { category: string } } }> {
 	
@@ -259,6 +259,10 @@ class Category extends Component<{ match: { params: { category: string } } }> {
 	
 }
 
+/**
+ * Article overview inside /redigerArtikkel
+ */
+
 class ArticleOverview extends Component {
 	
 	articles = [];
@@ -305,6 +309,9 @@ class ArticleOverview extends Component {
 	
 }
 
+/**
+ * Selected article to edit data
+ */
 
 class EditArticle extends Component<{ match: { params: { articleID: number } } }> {
 	
@@ -451,6 +458,9 @@ class EditArticle extends Component<{ match: { params: { articleID: number } } }
 	
 }
 
+/**
+ * Main page for editing, deleting and adding articles
+ */
 
 class EditArticles extends Component {
 	
@@ -574,6 +584,11 @@ class EditArticles extends Component {
 	
 }
 
+/**
+ * Live feed containing articles with importance = 2.
+ * Only showing on home page (/home)
+ */
+
 class LiveFeed extends Component {
 	
 	articles = [];
@@ -617,6 +632,9 @@ class LiveFeed extends Component {
 	
 }
 
+/**
+ * Class for redirecting (/) and (/#/) to (/home)
+ */
 
 class Redirection extends Component {
 	render () {

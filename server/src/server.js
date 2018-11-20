@@ -36,6 +36,9 @@ if (pool) {
 
 const ARTICLE_LIMIT = 6;
 
+/**
+ * Gets all articles from NewsArticle with importance = 1
+ */
 app.get('/article', (req: Request, res: Response) => {
 	articleDao.getAll((status, data) => {
 		res.status(status);
@@ -43,6 +46,9 @@ app.get('/article', (req: Request, res: Response) => {
 	})
 });
 
+/**
+ * Adds new article to NewsArticle
+ */
 app.post('/article', (req: Request, res: Response) => {
 	articleDao.createOne(req.body, (status, data) => {
 		res.status(status);
@@ -50,6 +56,9 @@ app.post('/article', (req: Request, res: Response) => {
 	})
 });
 
+/**
+ * Gets all articles from NewsArticle
+ */
 app.get('/articlesImportance', (req: Request, res: Response) => {
 	articleDao.getAllImportance((status, data) => {
 		res.status(status);
@@ -57,7 +66,9 @@ app.get('/articlesImportance', (req: Request, res: Response) => {
 	})
 });
 
-
+/**
+ * Gets one article from NewsArticle
+ */
 app.get('/article/:category/:articleID', (req: Request, res: Response) => {
 	articleDao.getOne(req.params.articleID, (status, data) => {
 		res.status(status);
@@ -65,6 +76,9 @@ app.get('/article/:category/:articleID', (req: Request, res: Response) => {
 	})
 });
 
+/**
+ * Gets one article from NewsArticle only depending on article ID
+ */
 app.get('/articleGetOne/:articleID', (req: Request, res: Response) => {
 	articleDao.getOneByID(req.params.articleID, (status, data) => {
 		res.status(status);
@@ -72,6 +86,9 @@ app.get('/articleGetOne/:articleID', (req: Request, res: Response) => {
 	})
 });
 
+/**
+ * Gets all categories from Category
+ */
 app.get('/categories', (req: Request, res: Response) => {
 	articleDao.getAllCategories((status, data) => {
 		res.status(status);
@@ -79,6 +96,9 @@ app.get('/categories', (req: Request, res: Response) => {
 	})
 });
 
+/**
+ * Gets all articles with specific category
+ */
 app.get('/article/:category', (req: Request, res: Response) => {
 	articleDao.getArticlesCategory(req.params.category, (status, data) => {
 		res.status(status);
@@ -86,6 +106,9 @@ app.get('/article/:category', (req: Request, res: Response) => {
 	})
 });
 
+/**
+ * Deletes one article from NewsArticle depending on article ID
+ */
 app.delete('/deleteArticle/:articleID', (req: Request, res: Response) => {
 	articleDao.deleteOneByID(req.params.articleID, (status, data) => {
 		res.status(status);
@@ -93,6 +116,9 @@ app.delete('/deleteArticle/:articleID', (req: Request, res: Response) => {
 	})
 });
 
+/**
+ * Updates one article in NewsArticle depending on article ID
+ */
 app.put('/updateArticle/:articleID', (req: Request, res: Response) => {
 	articleDao.updateOne(req.body, (status, data) => {
 		res.status(status);
@@ -100,6 +126,9 @@ app.put('/updateArticle/:articleID', (req: Request, res: Response) => {
 	})
 });
 
+/**
+ * Gets all articles to use in live feed from NewsArticle where importance = 2
+ */
 app.get('/liveFeed', (req: Request, res: Response)=>{
 	articleDao.getAllLiveFeed((status, data) => {
 		res.status(status);
@@ -107,6 +136,10 @@ app.get('/liveFeed', (req: Request, res: Response)=>{
 	})
 });
 
+/**
+ * Gets all articles for home page/main page where form NewsArticle where importance = 1
+ * and by limit (max number of articles per page)
+ */
 app.get('/mainpage', (req: Request, res: Response)=>{
 	const page: number = Number(req.query.page) || 0;
 	articleDao.getAllPriority(page*ARTICLE_LIMIT, ARTICLE_LIMIT, (status, data) => {
@@ -115,6 +148,10 @@ app.get('/mainpage', (req: Request, res: Response)=>{
 	})
 });
 
+/**
+ * Gets all articles for home page/main page where form NewsArticle where category = ? (Sport, Kultur, Teknologi)
+ * and by limit (max number of articles per page)
+ */
 app.get('/mainpage/categoryPage/:category', (req: Request, res: Response)=>{
 	const page: number = Number(req.query.page) || 0;
 	console.log('Page number: ' + page + ' category: ' + req.params.category);
@@ -124,6 +161,9 @@ app.get('/mainpage/categoryPage/:category', (req: Request, res: Response)=>{
 	})
 });
 
+/**
+ * Gets the count of articles on home page/main page where importance = 1
+ */
 app.get('/mainpage/count', (req: Request, res: Response)=>{
 	articleDao.getCountArticlesImportance((status, data)=>{
 		res.status(status);
@@ -131,6 +171,9 @@ app.get('/mainpage/count', (req: Request, res: Response)=>{
 	})
 });
 
+/**
+ * Gets the count of articles on a category page
+ */
 app.get('/mainpage/:category/count', (req: Request, res: Response)=>{
 	articleDao.getCountArticlesCategory(req.params.category, (status, data)=>{
 		res.status(status);
