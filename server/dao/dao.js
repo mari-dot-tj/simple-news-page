@@ -1,6 +1,4 @@
 
-
-
 module.exports = class Dao {
 	pool: Object;
 	

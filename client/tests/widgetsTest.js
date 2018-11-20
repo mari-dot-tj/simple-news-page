@@ -101,6 +101,11 @@ describe('ButtonSuccess tests', () => {
 	it('Sjekker at ButtonSuccess har de rette klassene', () => {
 		expect(wrapper.find('button').hasClass('btn btn-success ml-3')).toEqual(true)
 	});
+	
+	it('Check that button has correct type', ()=>{
+		expect(wrapper.find('button').prop('type')).toEqual('button')
+	})
+	
 });
 
 describe('NewsCard tests', () => {
