@@ -12,7 +12,7 @@ type jsonUpdate = {
 	contents: string,
 	picture: string,
 	importance: number
-}
+};
 type jsonUpdateA = {
 	articleID: number,
 	headline: string,
@@ -20,7 +20,7 @@ type jsonUpdateA = {
 	contents: string,
 	picture: string,
 	importance: number
-}
+};
 
 module.exports = class ArticleDao extends Dao {
 	
@@ -117,6 +117,18 @@ module.exports = class ArticleDao extends Dao {
 	getArticlesCategoryPage(category: string, start: number, end: number, callback: mixed){
 		super.query("select articleID, headline, category, contents, picture, importance, DATE_FORMAT(timeStampMade, \"%Y.%c.%d %H:%i\") AS timeStampMade FROM NewsArticle where category = ? ORDER BY timeStampMade DESC LIMIT ?,?",
 			[category, start, end],
+			callback);
+	}
+	
+	getCountArticlesImportance(callback: mixed){
+		super.query("select COUNT(*) as x from NewsArticle where importance = 1",
+			[],
+			callback);
+	}
+	
+	getCountArticlesCategory(category: string, callback: mixed){
+		super.query("select COUNT(*) as x from NewsArticle where category = ?",
+			[category],
 			callback);
 	}
 	

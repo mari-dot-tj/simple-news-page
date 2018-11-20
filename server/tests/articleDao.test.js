@@ -1,7 +1,9 @@
+// @flow
+
 const mysql = require("mysql");
 
-const ArticleDao = require("./articleDao.js");
-const runsqlfile = require("./runsqlfile.js");
+const ArticleDao = require("../dao/articleDao.js");
+const runsqlfile = require("../dao/runsqlfile.js");
 
 // GitLab CI Pool
 const pool = mysql.createPool({
@@ -81,11 +83,22 @@ test("add article to db", done => {
 			"Test callback: status=" + status + ", data=" + JSON.stringify(data)
 		);
 		expect(data.affectedRows).toBeGreaterThanOrEqual(1);
+		expect(data[0].headline).toBe("Test-Headline3");
+		expect(data[0].category).toBe("Teknologi");
+		expect(data[0].contents).toBe("Test-bdoy");
+		expect(data[0].picture).toBe("link");
+		expect(data[0].importance).toBe(2);
 		done();
 	}
 	
 	articleDao.createOne(
-		{headline: "Test-Headline3", category: 'Teknologi', contents: "Test-bdoy", picture: "link", importance: 2},
+		{
+			headline: "Test-Headline3",
+			category: "Teknologi",
+			contents: "Test-bdoy",
+			picture: "link",
+			importance: 2
+		},
 		callback
 	);
 });
@@ -186,6 +199,32 @@ test("get all categories from Category table", done => {
 	}
 	
 	articleDao.getAllCategories(callback);
+	
+});
+
+test("get all articles count from NewsArticle where importance = 1", done => {
+	function callback (status, data) {
+		console.log(
+			"Test callback: status=" + status + ", data.length=" + data.length
+		);
+		expect(data[0].x).toBeGreaterThan(1);
+		done();
+	}
+	
+	articleDao.getCountArticlesImportance(callback);
+	
+});
+
+test("get all articles count from NewsArticle where category = ?", done => {
+	function callback (status, data) {
+		console.log(
+			"Test callback: status=" + status + ", data[0].x=" + data[0].x
+		);
+		expect(data[0].x).toBeGreaterThan(1);
+		done();
+	}
+	
+	articleDao.getCountArticlesCategory('Kultur', callback);
 	
 });
 

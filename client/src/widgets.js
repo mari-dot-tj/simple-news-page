@@ -266,23 +266,26 @@ export class NewsFeedProp extends Component<{
 export class Navigation extends Component<{
 	next: () => mixed,
 	prev: () => mixed,
+	showPrev: boolean,
+	showNext: boolean,
 	children: number
 }>{
-
+	
+	
 	render(){
 		return(
 			<div className="align-text-center navigationBtn">
 				<nav aria-label="Page navigation example">
 					<ul className="pagination align-content-center">
-						<li className="page-item text-center">
+						<li className="page-item text-center" style={{display: this.props.showPrev ? 'block' : 'none'}}>
 							<a className="page-link" onClick={this.props.prev} aria-label="Forrige">
 								<span aria-hidden="true">&laquo;</span>
 								<span className="sr-only">Forrige</span>
 							</a>
 						</li>
-						<li className="page-item text-center">
+						<li className="page-item text-center" >
 							<a className="page-link" href="#">{this.props.children}</a></li>
-						<li className="page-item text-center">
+						<li className="page-item text-center" style={{display: this.props.showNext ? 'block' : 'none'}}>
 							<a className="page-link" onClick={this.props.next} aria-label="Neste">
 								<span aria-hidden="true">&raquo;</span>
 								<span className="sr-only">Neste</span>
@@ -295,7 +298,6 @@ export class Navigation extends Component<{
 			</div>
 		)
 	}
-
 
 }
 

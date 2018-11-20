@@ -19,6 +19,9 @@ class Category{
 	category: string;
 }
 
+class CountArt{
+	x: number;
+}
 
 
 class ArticleService {
@@ -65,6 +68,14 @@ class ArticleService {
 	getArticlesCategoryPage(page: number = 0 ,category: string): Promise<Article[]>{
 		console.log('Page number: ' + page + ' category: ' + category + ' SERVICES');
 		return axios.get('/mainpage/categoryPage/' + category + '?page=' + page);
+	}
+	
+	getCountArticlesImportance(): Promise<CountArt[]>{
+		return axios.get('/mainpage/count');
+	}
+	
+	getCountArticlesCategory(category: string): Promise<CountArt[]>{
+		return axios.get('/mainpage/' + category + '/count');
 	}
 	
 }

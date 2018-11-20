@@ -43,6 +43,10 @@ class Home extends Component {
 	
 	articles = [];
 	page: number = 0;
+	countArticles: number = 0;
+	maxPage: number = 0;
+	showNext: boolean = false;
+	showPrev: boolean = false;
 	
 	render () {
 		
@@ -59,13 +63,14 @@ class Home extends Component {
 						))
 					}
 				</div>
-				<Navigation next = {this.nextPage} prev = {this.prevPage}>
+				<Navigation showNext={this.showNext} showPrev={this.showPrev} next = {this.nextPage} prev = {this.prevPage}>
 					{this.page + 1}
 				</Navigation>
 			</div>
 		
 		)
 	}
+	//TODO: fix logic's: antall artikler/6 (antall pr side) = maxpage. vet hvor mange sider jeg skal. hvis currpage og maxpage er samme = false ellers true. en for kategori siden og en for home (articledao)
 	
 	/*	getPage = () => {
 			articleService.getAllPriority(this.page)
@@ -73,6 +78,15 @@ class Home extends Component {
 				.catch((error: Error) => Alert.danger(error.message));
 			window.scrollTo(0, 0);
 		};*/
+	
+	
+	checkDisplayButtons = () =>{
+		this.showPrev = this.page !== 0;
+		
+		this.showNext = this.maxPage-1 !== this.page;
+		console.log('nextpage= ' + this.showNext.toString() + ' prevpage= ' + this.showPrev.toString() + ' this.maxpage= ' + this.maxPage);
+	};
+
 	
 	getPage = async () => {
 		try {
@@ -83,6 +97,7 @@ class Home extends Component {
 			Alert.danger(e);
 		}
 		window.scrollTo(0, 0);
+		this.checkDisplayButtons();
 		
 	};
 	
@@ -105,9 +120,17 @@ class Home extends Component {
 	};
 	
 	
-	mounted () {
+	async mounted () {
+		this.page = 0;
 		
-		this.getPage();
+		await articleService.getCountArticlesImportance()
+			.then(count => (this.countArticles = count[0].x))
+			.then(() => {
+				console.log(this.countArticles + ' count.');
+				this.maxPage = Math.ceil(this.countArticles/6);
+				console.log(this.maxPage + ' maxpage');
+				this.getPage();
+			});
 		
 		/*articleService
 			.getAll()
@@ -158,7 +181,10 @@ class Category extends Component<{ match: { params: { category: string } } }> {
 	
 	articles = [];
 	page: number = 0;
-	
+	countArticles: number = 0;
+	maxPage: number = 0;
+	showNext: boolean = false;
+	showPrev: boolean = false;
 	
 	render () {
 		return (
@@ -172,8 +198,7 @@ class Category extends Component<{ match: { params: { category: string } } }> {
 										to = {"/home/" + article.category + "/" + article.articleID} />
 						))}
 				</div>
-				
-				<Navigation next = {this.nextPage} prev = {this.prevPage}>
+				<Navigation showNext={this.showNext} showPrev={this.showPrev} next = {this.nextPage} prev = {this.prevPage}>
 					{this.page + 1}
 				</Navigation>
 				
@@ -181,8 +206,13 @@ class Category extends Component<{ match: { params: { category: string } } }> {
 		)
 	}
 	
+	checkDisplayButtons = () =>{
+		this.showPrev = this.page !== 0;
+		
+		this.showNext = this.maxPage-1 !== this.page;
+	};
+	
 	getPage = async () => {
-		//TODO: 
 		try {
 			await articleService.getArticlesCategoryPage(this.page, this.props.match.params.category)
 				.then(articles => (this.articles = articles))
@@ -191,6 +221,7 @@ class Category extends Component<{ match: { params: { category: string } } }> {
 			Alert.danger(e);
 		}
 		window.scrollTo(0, 0);
+		this.checkDisplayButtons();
 		
 	};
 	
@@ -213,9 +244,17 @@ class Category extends Component<{ match: { params: { category: string } } }> {
 	};
 	
 	
-	mounted () {
+	async mounted () {
 		this.page = 0;
-		this.getPage();
+		
+		await articleService.getCountArticlesCategory(this.props.match.params.category)
+			.then(count => (this.countArticles = count[0].x))
+			.then(() => {
+				console.log(this.countArticles + ' count.');
+				this.maxPage = Math.ceil(this.countArticles/6);
+				console.log(this.maxPage + ' maxpage');
+				this.getPage();
+			});
 	}
 	
 }
@@ -364,7 +403,9 @@ class EditArticle extends Component<{ match: { params: { articleID: number } } }
 							<Button.Success onClick = {() => this.update()}>
 								Oppdater
 							</Button.Success>
-						
+							<Button.Danger onClick = {() => history.push('/editArticles')}>
+								Avbryt
+							</Button.Danger>
 						</form>
 					</div>
 					
@@ -495,7 +536,7 @@ class EditArticles extends Component {
 							<Button.Success onClick = {() => this.publish()}>
 								Publiser
 							</Button.Success>
-							{/*<button type = "submit" className = "btn btn-primary" onClick = {this.publish}>Publiser</button>*/}
+							
 						</form>
 					</div>
 					
@@ -522,7 +563,7 @@ class EditArticles extends Component {
 		await articleService.createOne(this.article)
 			.catch((error: Error) => Alert.danger(error.message));
 		this.mounted();
-		Alert.success('You successfully created' + this.article.headline);
+		Alert.success('You successfully created ' + this.article.headline);
 	}
 	
 	mounted () {
