@@ -152,7 +152,7 @@ export class NewsCard extends Component<{
 	render () {
 		return (
 			<div className = "card" >
-				<img className = "card-img-top card-img-top" src = {this.props.imgLink} alt = "panda"
+				<img className = "card-img-article" src = {this.props.imgLink} alt = "panda"
 						 style = {{width: '100%'}} />
 				<div className = "card-body">
 					<h4 className = "card-title headerSpecs">{this.props.title}</h4>

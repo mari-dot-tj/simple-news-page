@@ -15,6 +15,12 @@
     object-fit: cover;
 }
 
+.card-img-article{
+    height: 40vw;
+    object-fit: cover;
+    width: 100%;
+}
+
 .wrapperArt{
     display: grid;
     grid-template-columns: 1fr;
