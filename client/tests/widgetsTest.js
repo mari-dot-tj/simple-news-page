@@ -116,7 +116,7 @@ describe('NewsCard tests', () => {
 	);
 	
 	it('Checking that img has the right classes', () => {
-		expect(wrapper.find('img').hasClass('card-img-top card-img-top')).toEqual(true)
+		expect(wrapper.find('img').hasClass('card-img-article')).toEqual(true)
 	});
 	
 	it('Checking that h4 has the right classes', () => {
