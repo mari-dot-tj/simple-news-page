@@ -509,6 +509,9 @@ class EditArticles extends Component {
 									className = "form-control"
 									id = "optKategori"
 									onChange = {(event: SyntheticInputEvent<HTMLInputElement>) => (this.article.category = event.target.value)}>
+									<option disabled selected>
+										Velg kategori
+									</option>
 									{
 										this.categories.map((category, i) => (
 											<option key = {i} value = {category.category}>
@@ -519,7 +522,7 @@ class EditArticles extends Component {
 								</select>
 							</div>
 							<div className = "form-group">
-								<label htmlFor = "chViktighet">Viktighet</label>
+								<label htmlFor = "chViktighet">Velg viktighet:</label>
 								<br />
 								<input name = "viktighet"
 											 className = "form-check-input"
